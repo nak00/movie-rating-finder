@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{user/layout :: layout(
+        title=~{::title},
+        content=~{::section},
+        headContent=~{},
+        scripts=~{}
+      )}">
+<head>
+  <title>About - Movie Rating Finder</title>
+</head>
+<body>
+<section>
+  <div class="about-center-container">
+    <h1>about movierates</h1>
+
+    <div class="about-section">
+      <h2>🎬 Hello Movie lovers!</h2>
+      <div class="about-desc">
+        movierates is your go-to web application for discovering, searching, and tracking movies.
+        Instantly view ratings from IMDB and Rotten Tomatoes, and manage your personal watchlist.
+      </div>
+    </div>
+
+    <div class="about-thanks">
+      Thanks for checking out Movie Rating Finder!
+    </div>
+  </div>
+</section>
+</body>
+</html>

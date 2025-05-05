@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(
+        title=~{::title},
+        content=~{::main},
+        headContent=~{},
+        scripts=~{::script}
+      )}">
+<head>
+  <title>Search OMDb - Admin</title>
+</head>
+<body>
+<main>
+  <div class="admin-dashboard-container">
+    <h1 class="admin-section-title">Search OMDb API</h1>
+
+    <div class="admin-form-container">
+      <div class="admin-form-group">
+        <label class="admin-form-label">Movie Title</label>
+        <input type="text" id="movieTitle" class="form-control admin-form-control" required />
+      </div>
+
+      <button type="button" onclick="searchMovies()" class="btn admin-btn-primary">Search</button>
+    </div>
+
+    <div id="searchError" class="alert alert-danger mt-4" role="alert" style="display: none;">
+      Error message
+    </div>
+
+    <!-- Search Results List -->
+    <div id="searchResultsList" class="admin-form-container mt-4" style="display: none;">
+      <h3 class="admin-action-title">Search Results</h3>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Poster</th>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Type</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody id="resultsTableBody">
+          <!-- Results will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+      <div id="pagination" class="d-flex justify-content-center mt-3">
+        <!-- Pagination will be inserted here -->
+      </div>
+    </div>
+
+    <!-- Single Movie Details -->
+    <div id="movieDetails" class="admin-form-container mt-4" style="display: none;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="admin-action-title">Movie Details</h3>
+        <button type="button" onclick="backToResults()" class="btn btn-sm btn-secondary">
+          <i class="bi bi-arrow-left"></i> Back to Results
+        </button>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <img id="posterImage" class="img-fluid rounded" alt="Movie Poster" />
+          <div id="noPoster" class="placeholder-poster" style="display: none;">
+            <i class="bi bi-film"></i>
+            <p>No Poster Available</p>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <h4 id="movieName">Movie Title</h4>
+          <p><strong>Year:</strong> <span id="movieYear">2023</span></p>
+          <p><strong>IMDb Rating:</strong> <span id="imdbRating">8.5</span></p>
+          <p><strong>IMDb ID:</strong> <span id="imdbId">tt1234567</span></p>
+          <p><strong>Description:</strong> <span id="moviePlot">Movie description</span></p>
+
+          <button type="button" onclick="importMovie()" class="btn admin-btn-primary">Import to Database</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script th:inline="javascript">
+  // Get API key from server-side
+  const apiKey = /*[[${@environment.getProperty('omdb.api.key')}]]*/ '465e5b90';
+  const csrfToken = /*[[${_csrf.token}]]*/ '';
+</script>
+<script th:src="@{/admin/js/omdb-search.js}"></script>
+</body>
+</html>

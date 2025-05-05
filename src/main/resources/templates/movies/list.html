@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: html(
+        title=~{::title},
+        content=~{::main},
+        headContent=~{},
+        scripts=~{}
+      )}">
+<head>
+  <title>Movies - Movie Rating Finder</title>
+</head>
+<body>
+<main>
+  <div class="container mt-4">
+    <h1 class="mb-4">Movies</h1>
+
+    <!-- Search Form -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <form action="/movies" method="get" class="d-flex">
+          <input type="text" name="search" class="form-control me-2" placeholder="Search movies..." th:value="${searchTerm}">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+      </div>
+      <div class="col-md-3">
+        <form action="/movies" method="get" class="d-flex">
+          <input type="number" name="year" class="form-control me-2" placeholder="Filter by year" th:value="${year}">
+          <button type="submit" class="btn btn-secondary">Filter</button>
+        </form>
+      </div>
+      <div class="col-md-3">
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
+            Sort By
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" th:href="@{/movies(page=${currentPage},sort='name')}">Title</a></li>
+            <li><a class="dropdown-item" th:href="@{/movies(page=${currentPage},sort='year')}">Year</a></li>
+            <li><a class="dropdown-item" th:href="@{/movies(page=${currentPage},sort='imdbRating,desc')}">Rating (High to Low)</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie Cards -->
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+      <div class="col" th:each="movie : ${movies}">
+        <div class="card h-100 movie-card">
+          <img th:if="${movie.posterUrl}" th:src="${movie.posterUrl}" class="card-img-top" alt="Movie Poster">
+          <div th:unless="${movie.posterUrl}" class="card-img-top placeholder-poster d-flex align-items-center justify-content-center">
+            <i class="bi bi-film" style="font-size: 3rem;"></i>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title" th:text="${movie.name}">Movie Title</h5>
+            <p class="card-text year" th:text="${movie.year}">2023</p>
+            <div class="ratings">
+                            <span class="badge bg-warning text-dark" th:if="${movie.imdbRating > 0}">
+                                <i class="bi bi-star-fill"></i> <span th:text="${movie.imdbRating}">8.5</span>
+                            </span>
+              <span class="badge bg-danger" th:if="${movie.rottenTomatoesRating > 0}">
+                                <i class="bi bi-trophy-fill"></i> <span th:text="${movie.rottenTomatoesRating + '%'}">90%</span>
+                            </span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a th:href="@{/movies/{id}(id=${movie.id})}" class="btn btn-sm btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav th:if="${totalPages > 1}" class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+          <a class="page-link" th:href="@{/movies(page=${currentPage - 1},size=12,search=${searchTerm},year=${year},sort=${sort})}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:if="${i == 0 || i == totalPages - 1 || (i >= currentPage - 2 && i <= currentPage + 2)}"
+            th:classappend="${currentPage == i} ? 'active'">
+          <a class="page-link" th:href="@{/movies(page=${i},size=12,search=${searchTerm},year=${year},sort=${sort})}" th:text="${i + 1}">1</a>
+        </li>
+
+        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+          <a class="page-link" th:href="@{/movies(page=${currentPage + 1},size=12,search=${searchTerm},year=${year},sort=${sort})}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</main>
+</body>
+</html>

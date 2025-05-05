@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(
+        title=~{::title},
+        content=~{::main},
+        headContent=~{},
+        scripts=~{::script}
+      )}">
+<head>
+  <title>User Management - Admin</title>
+</head>
+<body>
+<main>
+  <div class="admin-dashboard-container">
+    <h1 class="admin-section-title">User Management</h1>
+
+    <!-- Success/Error Messages -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <!-- Users table -->
+    <div class="admin-table">
+      <table class="table table-hover mb-0">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Roles</th>
+          <th>Status</th>
+          <th>Watchlist Items</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+          <td th:text="${user.id}">1</td>
+          <td th:text="${user.username}">username</td>
+          <td th:text="${user.email}">email@example.com</td>
+          <td>
+            <span th:if="${#strings.contains(user.roles, 'ROLE_ADMIN')}" class="badge bg-danger">Admin</span>
+            <span th:if="${#strings.contains(user.roles, 'ROLE_USER')}" class="badge bg-primary">User</span>
+          </td>
+          <td>
+            <span th:if="${user.enabled}" class="badge bg-success">Active</span>
+            <span th:unless="${user.enabled}" class="badge bg-warning">Pending</span>
+          </td>
+          <td th:text="${user.watchlist.size()}">0</td>
+          <td>
+            <div class="btn-group">
+              <a th:href="@{/admin/users/{id}(id=${user.id})}" class="btn btn-sm admin-btn-secondary">
+                <i class="bi bi-eye"></i> View
+              </a>
+              <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" method="post"
+                    onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                <button type="submit" class="btn btn-sm admin-btn-danger">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(users)}">
+          <td colspan="7" class="text-center py-4">No users found</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+<script>
+  // Any JavaScript for the users page
+</script>
+</body>
+</html>

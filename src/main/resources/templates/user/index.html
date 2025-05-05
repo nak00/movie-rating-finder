@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{user/layout-home :: layout(
+        title=~{::title},
+        content=~{::section},
+        headContent=~{},
+        scripts=~{::script}
+      )}">
+<head>
+    <title>Movie Rating Finder - Home</title>
+</head>
+<body>
+<section class="homepage-hero">
+    <!-- Logo -->
+    <div class="homepage-logo mx-auto mb-3">
+        <img src="user/images/logo.png" alt="Logo" style="width:180px; height:120px; display:block; margin:auto;">
+    </div>
+    <!-- Site Name -->
+    <h1 class="homepage-sitename text-center mb-1">movierates</h1>
+    <!-- Tagline -->
+    <h2 class="homepage-tagline text-center mb-4">Your Favorite Movie's Ratings</h2>
+    <!-- Search Box -->
+    <form action="/movies" method="get" class="homepage-search-form d-flex justify-content-center mb-4" autocomplete="off">
+        <input type="text" name="search" class="form-control form-control-lg homepage-search-input" style="max-width:350px;" placeholder="example: Parasite...">
+        <button class="btn btn-dark btn-lg ms-2 homepage-search-btn" type="submit">GO</button>
+    </form>
+    <!-- Navigation Links -->
+    <nav class="homepage-nav mb-5 text-center">
+        <a href="/movies" class="homepage-nav-link">all movies</a>
+        <span class="homepage-nav-sep"></span>
+        <a href="/about" class="homepage-nav-link">about</a>
+        <span class="homepage-nav-sep"></span>
+        <a href="/login" class="homepage-nav-link" sec:authorize="isAnonymous()">login</a>
+        <a href="/watchlist" class="homepage-nav-link" sec:authorize="isAuthenticated()">watchlist</a>
+    </nav>
+    <!-- Featured/Trending Movies Grid -->
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-3 g-5 justify-content-center homepage-movie-grid">
+        <!-- The view-layer filtering is redundant if you're using getTopRatedMoviesWithValidPosters() -->
+        <!-- But keeping it as a safeguard with improved conditions -->
+        <div class="col d-flex flex-column align-items-center"
+             th:each="movie : ${topMovies}"
+             th:if="${movie.posterUrl != null &&
+                   !movie.posterUrl.isEmpty() &&
+                   !movie.posterUrl.equals('N/A') &&
+                   !movie.posterUrl.equals('NA') &&
+                   !movie.posterUrl.startsWith('http://N/A') &&
+                   !movie.posterUrl.startsWith('https://N/A') &&
+                   !movie.posterUrl.startsWith('http://NA') &&
+                   !movie.posterUrl.startsWith('https://NA') &&
+                   !movie.posterUrl.contains('no_image') &&
+                   !movie.posterUrl.contains('placeholder') &&
+                   movie.posterUrl.startsWith('http')}">
+            <a th:href="@{/movies/{id}(id=${movie.id})}" style="text-decoration:none;">
+                <div class="homepage-movie-poster mb-2">
+                    <img th:src="${movie.posterUrl}" alt="Movie Poster" onerror="this.onerror=null; this.src='/user/images/default-poster.jpg';" style="width:170px; height:250px; object-fit:cover; background:#111;">
+                </div>
+                <div class="homepage-movie-name text-center fw-bold" th:text="${movie.name}">Movie Name</div>
+            </a>
+        </div>
+    </div>
+</section>
+<script th:src="@{/user/js/index.js}"></script>
+</body>
+</html>

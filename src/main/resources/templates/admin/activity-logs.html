@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(
+        title=~{::title},
+        content=~{::main},
+        headContent=~{},
+        scripts=~{::script}
+      )}">
+<head>
+  <title>Activity Logs - Admin</title>
+</head>
+<body>
+<main>
+  <div class="admin-dashboard-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="admin-section-title">Activity Logs</h1>
+      <a href="/admin/settings" class="admin-btn admin-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Settings
+      </a>
+    </div>
+
+    <!-- Filter controls -->
+    <div class="admin-form-container mb-4">
+      <form action="/admin/settings/logs" method="get" class="row g-3">
+        <div class="col-md-4">
+          <select name="type" class="form-select admin-form-control">
+            <option value="">All Actions</option>
+            <option value="added">Added</option>
+            <option value="updated">Updated</option>
+            <option value="deleted">Deleted</option>
+            <option value="login">Login</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <input type="date" name="date" class="form-control admin-form-control" />
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn admin-btn-primary w-100">Filter</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Logs table -->
+    <div class="admin-table">
+      <table class="table table-hover mb-0">
+        <thead>
+        <tr>
+          <th>Action</th>
+          <th>User</th>
+          <th>Item</th>
+          <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Sample log entries - replace with actual data -->
+        <tr>
+          <td><span class="badge bg-info">Added</span> Movie</td>
+          <td>admin</td>
+          <td>Inception</td>
+          <td>Today, 10:45 AM</td>
+        </tr>
+        <tr>
+          <td><span class="badge bg-warning">Updated</span> Movie</td>
+          <td>admin</td>
+          <td>The Dark Knight</td>
+          <td>Yesterday, 3:20 PM</td>
+        </tr>
+        <tr>
+          <td><span class="badge bg-success">New</span> User</td>
+          <td>system</td>
+          <td>john_doe</td>
+          <td>Yesterday, 1:15 PM</td>
+        </tr>
+        <tr>
+          <td><span class="badge bg-danger">Deleted</span> Movie</td>
+          <td>admin</td>
+          <td>Bad Movie</td>
+          <td>May 1, 2025, 9:30 AM</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+<script>
+  // Any JavaScript for the logs page
+</script>
+</body>
+</html>

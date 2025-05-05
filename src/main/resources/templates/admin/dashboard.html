@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(
+        title=~{::title},
+        content=~{::main},
+        headContent=~{},
+        scripts=~{}
+      )}">
+<head>
+  <title>Admin Dashboard - Movie Rating Finder</title>
+</head>
+<body>
+<main>
+  <div class="admin-dashboard-container">
+    <h1 class="admin-section-title">Dashboard</h1>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="admin-stats-card">
+          <div class="admin-stats-value" th:text="${movieCount ?: 0}">150</div>
+          <div class="admin-stats-label">Total Movies</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="admin-stats-card">
+          <div class="admin-stats-value" th:text="${userCount ?: 0}">42</div>
+          <div class="admin-stats-label">Registered Users</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="admin-stats-card">
+          <div class="admin-stats-value" th:text="${watchlistCount ?: 0}">87</div>
+          <div class="admin-stats-label">Watchlist Entries</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="admin-stats-card">
+          <div class="admin-stats-value" th:text="${reviewCount ?: 0}">124</div>
+          <div class="admin-stats-label">User Reviews</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <h2 class="admin-section-title">Quick Actions</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="admin-action-card">
+          <h3 class="admin-action-title">Movie Management</h3>
+          <p>Add, edit, or remove movies from the database.</p>
+          <a href="/admin/movies" class="admin-action-link">Manage Movies</a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="admin-action-card">
+          <h3 class="admin-action-title">User Management</h3>
+          <p>View and manage user accounts and permissions.</p>
+          <a href="/admin/users" class="admin-action-link">Manage Users</a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="admin-action-card">
+          <h3 class="admin-action-title">Add New Movie</h3>
+          <p>Quickly add a new movie to the database.</p>
+          <a href="/admin/movies/new" class="admin-action-link">Add Movie</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <h2 class="admin-section-title">Recent Activity</h2>
+    <div class="admin-table">
+      <table class="table table-hover mb-0">
+        <thead>
+        <tr>
+          <th>Action</th>
+          <th>User</th>
+          <th>Item</th>
+          <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- If you have activity data, use th:each here -->
+        <tr>
+          <td><span class="badge bg-info">Added</span> Movie</td>
+          <td>admin</td>
+          <td>Inception</td>
+          <td>Today, 10:45 AM</td>
+        </tr>
+        <tr>
+          <td><span class="badge bg-warning">Updated</span> Movie</td>
+          <td>admin</td>
+          <td>The Dark Knight</td>
+          <td>Yesterday, 3:20 PM</td>
+        </tr>
+        <tr>
+          <td><span class="badge bg-success">New</span> User</td>
+          <td>system</td>
+          <td>john_doe</td>
+          <td>Yesterday, 1:15 PM</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+</body>
+</html>

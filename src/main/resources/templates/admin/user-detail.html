@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(
+        title=~{::title},
+        content=~{::main},
+        headContent=~{},
+        scripts=~{::script}
+      )}">
+<head>
+  <title th:text="'User: ' + ${user.username} + ' - Admin'">User Details</title>
+</head>
+<body>
+<main>
+  <div class="admin-dashboard-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="admin-section-title" th:text="'User: ' + ${user.username}">User Details</h1>
+      <a href="/admin/users" class="admin-btn admin-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Users
+      </a>
+    </div>
+
+    <!-- User details -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="admin-form-container">
+          <h3 class="admin-action-title">User Information</h3>
+
+          <div class="mb-3">
+            <label class="admin-form-label">User ID</label>
+            <input type="text" class="form-control admin-form-control" th:value="${user.id}" readonly />
+          </div>
+
+          <div class="mb-3">
+            <label class="admin-form-label">Username</label>
+            <input type="text" class="form-control admin-form-control" th:value="${user.username}" readonly />
+          </div>
+
+          <div class="mb-4">
+            <label class="admin-form-label">Current Roles</label>
+            <div>
+              <span th:if="${#strings.contains(user.roles, 'ROLE_ADMIN')}" class="badge bg-danger me-2">Admin</span>
+              <span th:if="${#strings.contains(user.roles, 'ROLE_USER')}" class="badge bg-primary me-2">User</span>
+            </div>
+          </div>
+
+          <form th:action="@{/admin/users/{id}/role(id=${user.id})}" method="post">
+            <div class="mb-3">
+              <label class="admin-form-label">Update Role</label>
+              <select name="role" class="form-select admin-form-control">
+                <option value="ROLE_USER" th:selected="${user.roles == 'ROLE_USER'}">Regular User</option>
+                <option value="ROLE_ADMIN" th:selected="${user.roles == 'ROLE_ADMIN'}">Admin Only</option>
+                <option value="ROLE_USER,ROLE_ADMIN" th:selected="${user.roles == 'ROLE_USER,ROLE_ADMIN'}">User and Admin</option>
+              </select>
+            </div>
+            <button type="submit" class="btn admin-btn-primary">Update Role</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="admin-form-container">
+          <h3 class="admin-action-title">Watchlist</h3>
+
+          <div th:if="${#lists.isEmpty(user.watchlist)}" class="text-center py-4">
+            <i class="bi bi-collection-play" style="font-size: 2rem;"></i>
+            <p class="mt-2">User has no movies in watchlist</p>
+          </div>
+
+          <div th:unless="${#lists.isEmpty(user.watchlist)}" class="watchlist-items">
+            <div class="admin-table">
+              <table class="table table-hover mb-0">
+                <thead>
+                <tr>
+                  <th>Movie</th>
+                  <th>Year</th>
+                  <th>Rating</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="movie : ${user.watchlist}">
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img th:if="${movie.posterUrl}" th:src="${movie.posterUrl}" alt="Poster"
+                           style="height: 40px; width: auto; border-radius: 4px; margin-right: 10px;">
+                      <span th:text="${movie.name}">Movie Title</span>
+                    </div>
+                  </td>
+                  <td th:text="${movie.year}">2023</td>
+                  <td th:text="${movie.imdbRating}">8.5</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  // Any JavaScript for the user detail page
+</script>
+</body>
+</html>

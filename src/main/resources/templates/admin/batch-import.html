@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(
+        title=~{::title},
+        content=~{::main},
+        headContent=~{},
+        scripts=~{::script}
+      )}">
+<head>
+  <title>Batch Import - Admin</title>
+</head>
+<body>
+<main>
+  <div class="admin-dashboard-container">
+    <h1 class="admin-section-title">Batch Import Movies</h1>
+
+    <div class="alert alert-info">
+      <p><strong>Note:</strong> Batch importing allows you to add multiple movies at once from the OMDb API.</p>
+      <p>Each page contains 10 movies. The maximum number of pages you can fetch at once is 100 (1000 movies).</p>
+    </div>
+
+    <div class="admin-form-container mb-4">
+      <form id="batchImportForm" action="/admin/batch-import/start" method="post" class="row g-3">
+        <!-- Add CSRF token -->
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+        <div class="col-md-4">
+          <label class="admin-form-label">Search Query</label>
+          <input type="text" name="query" class="form-control admin-form-control"
+                 placeholder="e.g., Marvel, Star Wars" required>
+          <small class="form-text text-muted">Enter a search term to find movies</small>
+        </div>
+        <div class="col-md-3">
+          <label class="admin-form-label">Year (Optional)</label>
+          <input type="number" name="year" class="form-control admin-form-control"
+                 placeholder="e.g., 2023" min="1900" max="2030">
+          <small class="form-text text-muted">Filter by release year</small>
+        </div>
+        <div class="col-md-3">
+          <label class="admin-form-label">Number of Pages</label>
+          <input type="number" name="pages" class="form-control admin-form-control"
+                 min="1" max="100" value="10" required>
+          <small class="form-text text-muted">Each page contains 10 movies</small>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn admin-btn-primary w-100" id="startImportBtn">
+            Start Import
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div id="importStatus" class="admin-form-container">
+      <h3 class="admin-action-title">Import Status</h3>
+
+      <div class="progress mb-3" style="height: 25px;">
+        <div class="progress-bar" role="progressbar" style="width: 0%;"
+             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <div class="card text-white bg-primary">
+            <div class="card-body">
+              <h5 class="card-title">Total Movies</h5>
+              <p class="card-text" id="totalMovies">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-success">
+            <div class="card-body">
+              <h5 class="card-title">Imported</h5>
+              <p class="card-text" id="importedMovies">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-info">
+            <div class="card-body">
+              <h5 class="card-title">Duplicates</h5>
+              <p class="card-text" id="duplicateMovies">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-danger">
+            <div class="card-body">
+              <h5 class="card-title">Errors</h5>
+              <p class="card-text" id="errorMovies">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-secondary">
+        <strong>Status:</strong> <span id="statusMessage">Idle</span>
+      </div>
+
+      <div class="alert alert-danger" id="errorAlert" style="display: none;">
+        <strong>Error:</strong> <span id="errorMessage"></span>
+      </div>
+    </div>
+  </div>
+</main>
+<script th:inline="javascript">
+  // Pass CSRF token to JavaScript
+  const csrfToken = /*[[${_csrf.token}]]*/ '';
+  const csrfHeader = /*[[${_csrf.headerName}]]*/ 'X-CSRF-TOKEN';
+</script>
+<script th:src="@{/admin/js/batch-import.js}"></script>
+</body>
+</html>

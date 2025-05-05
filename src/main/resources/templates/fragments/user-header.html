@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header th:fragment="header">
+  <nav class="navbar navbar-expand-lg navbar-dark user-header-nav">
+    <div class="user-header-flex" style="width:100vw; display:flex; align-items:center; justify-content:space-between;">
+      <!-- Logo and Site Name (left) -->
+      <a class="navbar-brand user-header-logo d-flex align-items-center" href="/" style="margin-right: 0;">
+        <img th:src="@{/user/images/logo.png}" alt="Logo" width="30" height="30" class="d-inline-block align-top">
+        <span class="user-header-site-name ms-2">movierates</span>
+      </a>
+      <!-- Search Box (centered) -->
+      <form action="/movies" method="get" class="header-search-form d-flex justify-content-center mx-auto" autocomplete="off" style="flex:1; max-width: 430px;">
+        <input type="text" name="search" class="form-control form-control-sm header-search-input" style="max-width:300px;" placeholder="example: Parasite">
+        <button class="btn btn-dark btn-sm ms-2 header-search-btn" type="submit">GO</button>
+      </form>
+      <!-- Right-aligned auth links -->
+      <div class="header-auth-links d-flex align-items-center justify-content-end" style="min-width:120px;">
+        <!-- Login button for anonymous users - styled like search button -->
+        <a sec:authorize="isAnonymous()" href="/login" class="btn btn-dark btn-sm ms-2">Login</a>
+
+        <!-- User profile dropdown for authenticated users -->
+        <div sec:authorize="isAuthenticated()" class="dropdown">
+          <a href="#" class="dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="user-avatar">
+              <i class="bi bi-person-circle"></i>
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <!-- Add username display at the top of dropdown -->
+            <li>
+              <div class="dropdown-item">
+                <i class="bi bi-person"></i>
+                <span th:text="${#authentication.name}">Username</span>
+              </div>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/watchlist">Watchlist</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form th:action="@{/logout}" method="post" class="dropdown-item-form">
+                <button type="submit" class="dropdown-item text-danger">Logout</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+</body>
+</html>

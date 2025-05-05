@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(
+        title=~{::title},
+        content=~{::main},
+        headContent=~{},
+        scripts=~{::script}
+      )}">
+<head>
+    <title th:text="${movie.id == null ? 'Add New Movie' : 'Edit Movie'} + ' - Admin'">Movie Form</title>
+</head>
+<body>
+<main>
+    <div class="admin-dashboard-container">
+        <h1 class="admin-section-title" th:text="${movie.id == null ? 'Add New Movie' : 'Edit Movie: ' + movie.name}">Movie Form</h1>
+
+        <div class="admin-form-container">
+            <form th:action="@{/admin/movies}" th:object="${movie}" method="post">
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Movie Title</label>
+                            <input type="text" th:field="*{name}" class="form-control admin-form-control" required />
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Description</label>
+                            <textarea th:field="*{description}" class="form-control admin-form-control" rows="4"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="admin-form-group">
+                                    <label class="admin-form-label">Release Year</label>
+                                    <input type="number" th:field="*{year}" class="form-control admin-form-control" min="1900" max="2099" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="admin-form-group">
+                                    <label class="admin-form-label">IMDB Rating</label>
+                                    <input type="number" th:field="*{imdbRating}" class="form-control admin-form-control" min="0" max="10" step="0.1" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="admin-form-group">
+                                    <label class="admin-form-label">Rotten Tomatoes %</label>
+                                    <input type="number" th:field="*{rottenTomatoesRating}" class="form-control admin-form-control" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Poster URL</label>
+                            <input type="url" th:field="*{posterUrl}" class="form-control admin-form-control" />
+
+                            <div class="mt-3 text-center">
+                                <div class="poster-preview">
+                                    <img th:if="*{posterUrl}" th:src="*{posterUrl}" class="img-fluid rounded" style="max-height: 250px;" />
+                                    <div th:unless="*{posterUrl}" class="poster-placeholder">
+                                        <i class="bi bi-image" style="font-size: 3rem;"></i>
+                                        <p>Poster Preview</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="/admin/movies" class="btn admin-btn-secondary">Cancel</a>
+                    <button type="submit" class="btn admin-btn-primary">Save Movie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<script>
+    // Preview poster image when URL changes
+    document.addEventListener('DOMContentLoaded', function() {
+        const posterUrlInput = document.querySelector('input[name="posterUrl"]');
+        const previewArea = document.querySelector('.poster-preview');
+
+        if (posterUrlInput && previewArea) {
+            posterUrlInput.addEventListener('input', function() {
+                const url = this.value.trim();
+                if (url) {
+                    previewArea.innerHTML = `<img src="${url}" class="img-fluid rounded" style="max-height: 250px;" onerror="this.onerror=null; this.src=''; this.parentNode.innerHTML='<div class=\\'poster-placeholder\\'><i class=\\'bi bi-exclamation-triangle\\'></i><p>Invalid Image URL</p></div>';" />`;
+                } else {
+                    previewArea.innerHTML = `<div class="poster-placeholder"><i class="bi bi-image" style="font-size: 3rem;"></i><p>Poster Preview</p></div>`;
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

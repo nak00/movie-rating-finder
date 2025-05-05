@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{user/layout :: layout(
+        title=~{::title},
+        content=~{::section},
+        headContent=~{},
+        scripts=~{}
+      )}">
+<head>
+    <title>My Watchlist - Movie Rating Finder</title>
+</head>
+<body>
+<section>
+    <div class="watchlist-center-container">
+        <h1 class="watchlist-title">my watchlist</h1>
+
+        <!-- Empty state -->
+        <div th:if="${#lists.isEmpty(watchlist)}" class="watchlist-empty-box">
+            no shows in your watchlist
+        </div>
+
+        <!-- Watchlist grid -->
+        <div th:if="${not #lists.isEmpty(watchlist)}" class="watchlist-movie-grid">
+            <div class="watchlist-movie-card" th:each="movie : ${watchlist}">
+                <img th:src="${movie.posterUrl}" th:alt="${movie.name}" class="watchlist-movie-poster">
+                <div class="watchlist-movie-info">
+                    <div class="watchlist-movie-name" th:text="${movie.name}">Movie Name</div>
+                    <div class="watchlist-action-links">
+                        <a th:href="@{/movies/{id}(id=${movie.id})}" class="watchlist-view-link">view details</a>
+                        <a th:href="@{/watchlist/remove/{id}(id=${movie.id})}" class="watchlist-remove-link">
+                            <i class="bi bi-x-circle"></i> remove
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

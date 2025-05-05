@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{user/layout :: layout(
+        title=~{::title},
+        content=~{::section},
+        headContent=~{},
+        scripts=~{}
+      )}">
+<head>
+    <title th:text="'Details - ' + ${movie.name}">Movie Details</title>
+</head>
+<body>
+<section>
+    <div class="movie-detail-container">
+        <!-- Poster -->
+        <img th:src="${movie.posterUrl}" alt="Movie Poster" class="movie-poster">
+        <!-- Movie Name -->
+        <div class="movie-title" th:text="${movie.name}">Movie Name</div>
+        <!-- Ratings -->
+        <div class="ratings-row">
+            <div class="rating-block">
+                <div class="rating-label imdb-label">IMDB</div>
+                <div class="imdb-score" th:text="${movie.imdbRating}">8.7</div>
+            </div>
+            <div class="rating-block">
+                <div class="rating-label rt-label">Rotten Tomatoes</div>
+                <div class="rt-score">
+                    <span th:text="${movie.rottenTomatoesRating}">95</span><span style="font-size:1.5rem;">%</span>
+                </div>
+            </div>
+        </div>
+        <!-- Meta and Description -->
+        <div class="movie-meta"><strong>Release Year:</strong> <span th:text="${movie.year}"></span></div>
+        <div class="movie-desc"><strong>Description:</strong> <span th:text="${movie.description}"></span></div>
+
+        <!-- Watchlist button, only for logged-in users -->
+        <div sec:authorize="isAuthenticated()">
+            <!-- Show "Save to Watchlist" if not in watchlist -->
+            <form th:if="${inWatchlist == null}" th:action="@{/watchlist/add/{id}(id=${movie.id})}" method="get" style="display:inline;">
+                <button type="submit" class="btn btn-success mt-2">Save to Watchlist</button>
+            </form>
+
+            <!-- Show "Added to Watchlist" if in watchlist -->
+            <a th:if="${inWatchlist != null}" href="/watchlist" class="btn btn-outline-success mt-2">
+                <i class="bi bi-check-circle-fill me-1"></i> Added to Watchlist
+            </a>
+        </div>
+
+        <a href="/movies" class="btn btn-secondary mt-3">Back to Movies</a>
+    </div>
+</section>
+</body>
+</html>

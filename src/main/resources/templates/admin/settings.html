@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(
+        title=~{::title},
+        content=~{::main},
+        headContent=~{},
+        scripts=~{::script}
+      )}">
+<head>
+  <title>System Settings - Admin</title>
+</head>
+<body>
+<main>
+  <div class="admin-dashboard-container">
+    <h1 class="admin-section-title">System Settings</h1>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="admin-form-container">
+          <h3 class="admin-action-title">Site Configuration</h3>
+
+          <form action="/admin/settings/update" method="post">
+            <div class="admin-form-group">
+              <label class="admin-form-label">Site Name</label>
+              <input type="text" name="siteName" class="form-control admin-form-control" value="Movie Rating Finder" />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label">Contact Email</label>
+              <input type="email" name="contactEmail" class="form-control admin-form-control" value="admin@example.com" />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label">Items Per Page</label>
+              <input type="number" name="itemsPerPage" class="form-control admin-form-control" value="10" min="5" max="50" />
+            </div>
+
+            <button type="submit" class="btn admin-btn-primary">Save Settings</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="admin-form-container">
+          <h3 class="admin-action-title">Admin Tools</h3>
+
+          <div class="d-grid gap-3">
+            <a href="/admin/settings/logs" class="btn admin-btn-secondary">
+              <i class="bi bi-list-ul"></i> View Activity Logs
+            </a>
+
+            <button class="btn admin-btn-secondary">
+              <i class="bi bi-arrow-repeat"></i> Clear Cache
+            </button>
+
+            <button class="btn admin-btn-danger">
+              <i class="bi bi-database-fill-x"></i> Reset Test Data
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  // Any JavaScript for the settings page
+</script>
+</body>
+</html>

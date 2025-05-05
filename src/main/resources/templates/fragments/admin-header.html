@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header th:fragment="header">
+  <nav class="navbar navbar-expand-lg admin-header-nav">
+    <div class="container-fluid">
+      <!-- Logo and Site Name -->
+      <a class="navbar-brand admin-header-logo" href="/admin/dashboard">
+        <img th:src="@{/admin/images/admin-logo.png}" alt="Admin Logo" width="30" height="30" class="d-inline-block align-top">
+        <span class="admin-header-site-name">Admin Panel</span>
+      </a>
+
+      <!-- Toggle button for mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarNav"
+              aria-controls="adminNavbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation Links -->
+      <div class="collapse navbar-collapse" id="adminNavbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 admin-header-links">
+          <li class="nav-item">
+            <a class="admin-header-link" th:classappend="${currentUri == '/admin/dashboard' ? 'active' : ''}"
+               href="/admin/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-header-link" th:classappend="${currentUri != null && currentUri.startsWith('/admin/movies') ? 'active' : ''}"
+               href="/admin/movies">Movies</a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-header-link" th:classappend="${currentUri != null && currentUri.startsWith('/admin/batch-import') ? 'active' : ''}"
+               href="/admin/batch-import">Batch Import</a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-header-link" th:classappend="${currentUri != null && currentUri.startsWith('/admin/users') ? 'active' : ''}"
+               href="/admin/users">Users</a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-header-link" th:classappend="${currentUri != null && currentUri.startsWith('/admin/settings') ? 'active' : ''}"
+               href="/admin/settings">Settings</a>
+          </li>
+        </ul>
+
+        <!-- Right side - User info and logout -->
+        <div class="d-flex align-items-center">
+          <span class="me-3 text-light">Admin: <span sec:authentication="name"></span></span>
+          <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+</body>
+</html>

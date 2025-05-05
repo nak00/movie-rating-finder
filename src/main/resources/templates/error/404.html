@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{user/layout :: layout(
+        title=~{::title},
+        content=~{::section},
+        headContent=~{},
+        scripts=~{}
+      )}">
+<head>
+    <title>404 - Not Found</title>
+</head>
+<body>
+<section style="text-align:center; padding-top:10vh;">
+    <div class="error-title">404</div>
+    <a href="/" class="error-page-link">Go Back Home</a>
+</section>
+</body>
+</html>
